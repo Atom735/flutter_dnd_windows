@@ -1,0 +1,12 @@
+{
+    "files.associations": {
+        "ostream": "cpp",
+        "*.tcc": "cpp",
+        "iosfwd": "cpp",
+        "chrono": "cpp",
+        "optional": "cpp",
+        "map": "cpp",
+        "memory": "cpp",
+        "xmemory": "cpp"
+    }
+}

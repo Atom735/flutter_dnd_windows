@@ -1,14 +1,15 @@
-
 import 'dart:async';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/services.dart';
 
-class FlutterDndWindows {
-  static const MethodChannel _channel =
-      const MethodChannel('flutter_dnd_windows');
+class FlutterDndWindowsPlugin extends EventChannel {
+  FlutterDndWindowsPlugin._() : super('flutter_dnd_windows');
+  static final _instance = FlutterDndWindowsPlugin._();
+  factory FlutterDndWindowsPlugin() => _instance;
 
-  static Future<String> get platformVersion async {
-    final String version = await _channel.invokeMethod('getPlatformVersion');
-    return version;
-  }
+  Stream<String>? _stream;
+
+  Stream<String> receiveBroadcastStream([args]) =>
+      _stream ??= super.receiveBroadcastStream().cast<String>();
 }

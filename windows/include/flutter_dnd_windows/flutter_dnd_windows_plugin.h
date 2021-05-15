@@ -10,14 +10,15 @@
 #endif
 
 #if defined(__cplusplus)
-extern "C" {
+extern "C"
+{
 #endif
 
-FLUTTER_PLUGIN_EXPORT void FlutterDndWindowsPluginRegisterWithRegistrar(
-    FlutterDesktopPluginRegistrarRef registrar);
+    FLUTTER_PLUGIN_EXPORT void FlutterDndWindowsPluginRegisterWithRegistrar(
+        FlutterDesktopPluginRegistrarRef registrar);
 
 #if defined(__cplusplus)
-}  // extern "C"
+} // extern "C"
 #endif
 
-#endif  // FLUTTER_PLUGIN_FLUTTER_DND_WINDOWS_PLUGIN_H_
+#endif // FLUTTER_PLUGIN_FLUTTER_DND_WINDOWS_PLUGIN_H_
