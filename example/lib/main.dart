@@ -8,35 +8,7 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  String _platformVersion = 'Unknown';
-
-  final _plugin = FlutterDndWindowsPlugin();
-  late StreamSubscription _ss;
-  final _ssVal = ValueNotifier<StreamSubscription?>(null);
-
-  @override
-  void initState() {
-    super.initState();
-    _ss = _plugin
-        .receiveBroadcastStream('Some argumets: Hello From Flutter!')
-        .listen(print);
-  }
-
-  @override
-  dispose() {
-    if (_ssVal.value != null) {
-      _ssVal.value!.cancel();
-    }
-    _ss.cancel();
-    super.dispose();
-  }
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -45,25 +17,37 @@ class _MyAppState extends State<MyApp> {
           title: const Text('Plugin example app'),
         ),
         body: Center(
-          child: ValueListenableBuilder(
-            valueListenable: _ssVal,
-            builder: (context, val, child) => TextButton(
-              onPressed: () {
-                setState(() {
-                  if (_ssVal.value == null) {
-                    _ssVal.value = _plugin
-                        .receiveBroadcastStream()
-                        .listen((s) => print('A: $s'));
-                  } else {
-                    _ssVal.value!.cancel();
-                    _ssVal.value = null;
-                  }
-                });
-              },
-              child: val == null
-                  ? Text('Preess for create stream')
-                  : Text('Preess for destroy stream'),
-            ),
+          child: StreamBuilder(
+            stream: FlutterDndWindowsPlugin().receiveBroadcastStream(),
+            initialData: {},
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                final data = (snapshot.data as Map).cast<String, Object>();
+                if (data['type'] == 'enter' || data['type'] == 'over') {
+                  return Column(
+                    children: [
+                      Text('Курсор: ${data['x']} x ${data['y']}'),
+                      Text('Перемещаются сюда след данные'),
+                      ...(data['items'] as List)
+                          .cast<String>()
+                          .map((e) => Text(e)),
+                    ],
+                  );
+                }
+                if (data['type'] == 'drop') {
+                  return Column(
+                    children: [
+                      Text('Курсор: ${data['x']} x ${data['y']}'),
+                      Text('Данные дропнуты сюда'),
+                      ...(data['items'] as List)
+                          .cast<String>()
+                          .map((e) => Text(e)),
+                    ],
+                  );
+                }
+              }
+              return Text('Переместите сюда файлы');
+            },
           ),
         ),
       ),

@@ -8,8 +8,10 @@ class FlutterDndWindowsPlugin extends EventChannel {
   static final _instance = FlutterDndWindowsPlugin._();
   factory FlutterDndWindowsPlugin() => _instance;
 
-  Stream<String>? _stream;
+  Stream<Map<String, Object>>? _stream;
 
-  Stream<String> receiveBroadcastStream([args]) =>
-      _stream ??= super.receiveBroadcastStream().cast<String>();
+  Stream<Map<String, Object>> receiveBroadcastStream([args]) =>
+      _stream ??= super
+          .receiveBroadcastStream()
+          .asyncMap((e) => (e as Map).cast<String, Object>());
 }
